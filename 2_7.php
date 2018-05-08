@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+
         table,th,td,tr{
             border:1px solid black;
             border-collapse:collapse;
@@ -30,7 +31,7 @@
 <h2 style="text-align:center">Thông tin các sản phẩm</h2>
     <table>
     <?php
-    $query="SELECT s.ten_sua,s.Hinh,hs.ten_hang_sua,ls.ten_loai,s.trong_luong,s.don_gia
+    $query="SELECT s.ma_sua,s.ten_sua,s.Hinh,hs.ten_hang_sua,ls.ten_loai,s.trong_luong,s.don_gia
     FROM sua AS s 
     JOIN hang_sua AS hs
     ON s.ma_hang_sua=hs.ma_hang_sua
@@ -45,7 +46,7 @@
       
         while($row=$result->fetch_assoc()){
             if($item%5==0) echo "<tr>";
-            echo "<td>".$row['ten_sua']."</br>";
+            echo "<td><a href='./list_chi_tiet.php?id={$row['ma_sua']}'>".$row['ten_sua']."</a></br>";
             echo $row['trong_luong']." gr - ".number_format($row['don_gia'],0,",",".")."</br>";
             echo '<img height="100px" width="100px" src="./Hinh_sua/' . $row['Hinh'] . '">'."</td>";
             

@@ -1,12 +1,11 @@
 <?php require('dbCon.php');
-		$rowsperPage=5;
-		if(!isset($_GET['page'])){
-            $_GET['page']=1;
-            
-		}
-		$page=$_GET['page'];
-		$offer=($page-1)*$rowsperPage;
-		
+$rowsperPage=2;
+if(!isset($_GET['page'])){
+    $_GET['page']=1;
+    
+}
+$page=$_GET['page'];
+$offer=($page-1)*$rowsperPage;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,38 +35,34 @@
 <body>
     
 
-<h2 style="text-align:center">Thông tin khách hàng</h2>
+<h2 style="text-align:center">Thông tin chi tiết các loại sữa</h2>
     <table>
-    <tr>
-        <th>STT</th>
-        <th>Tên sữa</th>
-        <th>Hãng sữa</th>
-        <th>Loại sữa</th>
-        <th>Trọng lượng</th>
-        <th>Đơn giá</th>
-    </tr>
     <?php
-    $query="SELECT s.ten_sua,hs.ten_hang_sua,ls.ten_loai,s.trong_luong,s.don_gia
+    $query="SELECT s.ten_sua,s.Hinh,hs.ten_hang_sua,ls.ten_loai,s.trong_luong,s.don_gia
     FROM sua AS s 
     JOIN hang_sua AS hs
     ON s.ma_hang_sua=hs.ma_hang_sua
     JOIN loai_sua AS ls
     ON s.ma_loai_sua=ls.ma_loai_sua
-    LIMIT ".$offer.",".$rowsperPage;
-   	
+    LIMIT ".$offer.",".$rowsperPage
+    ;
     $result=$conn->query($query);
     $n=0;
     if($result->num_rows>0){
+      
         while($row=$result->fetch_assoc()){
         $n++;
+        $str="";
     ?>
     <tr class="<?php echo ($n%2==0)?'even':'odd' ?>">
-        <td><?php echo $n?></td>
-        <td><?php echo $row['ten_sua']?></td>
-        <td><?php echo $row['ten_hang_sua']?></td>
-        <td><?php echo $row['ten_hang_sua']?></td>
-        <td><?php echo $row['trong_luong']?></td>
-        <td><?php echo number_format($row['don_gia'],0,",",".")." VNĐ"?></td>
+        <td><img height="100px" width="100px" src="./Hinh_sua/<?php echo $row['Hinh'] ?>"></td>
+        <td><?php $str="<b>".$row['ten_sua']."</b>"."</br>";
+        $str.="Nhà sản xuất".$row['ten_hang_sua']."</br>";
+        $str.=$row['ten_loai']." - ".$row['trong_luong']." gr";
+        $str.=$row['don_gia']." VNĐ";
+        echo $str;
+        ?></td>
+
     </tr>
 <?php
         }
@@ -76,7 +71,7 @@
 </table>
 <?php
 	
-	$kq=$conn->query('SELECT s.ten_sua,hs.ten_hang_sua,ls.ten_loai,s.trong_luong,s.don_gia
+	$kq=$conn->query('SELECT s.ten_sua,s.Hinh,hs.ten_hang_sua,ls.ten_loai,s.trong_luong,s.don_gia
     FROM sua AS s 
     JOIN hang_sua AS hs
     ON s.ma_hang_sua=hs.ma_hang_sua
